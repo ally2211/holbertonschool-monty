@@ -1,4 +1,4 @@
-#include "main.h"
+#include "monty.h"
 
 instruction_t ops[] = {
         {"push", push},
@@ -15,19 +15,19 @@ char *value;
 void read_bytecode_file(FILE *file)
 {
     char *line = NULL, *opcode;
-    size_t len = 0, read;
+    size_t len = 0, read, negone = -1;
     unsigned int line_number = 0;
     char delimiters[] = " $\t\n";
     stack_t *stack = NULL;
     bool opcode_found;
 	
-    while ((read = getline(&line, &len, file)) != (ssize_t) -1)
+    while ((read = getline(&line, &len, file)) != negone)
 	{
 		opcode = strtok(line, delimiters);
 		value = strtok(NULL, delimiters);
 		opcode_found = false;
 
-	/*	// Just as a debug print for now:
+	/*	
 		if (value != NULL)
 		{
 			printf("Opcode: %s, Value: %s\n", opcode, value);
