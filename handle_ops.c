@@ -1,0 +1,120 @@
+#include "main.h"
+
+void push(stack_t **stack, unsigned int line_number)
+{
+    stack_t *new_node;
+
+    new_node = malloc(sizeof(stack_t));
+    if (!new_node)
+    {
+        fprintf(stderr, "Error: malloc failed\n");
+        exit(EXIT_FAILURE);
+    }
+
+    new_node->n = atoi(value); // convert value to integer
+    new_node->next = *stack;
+    new_node->prev = NULL;
+    if (*stack)
+        (*stack)->prev = new_node;
+    *stack = new_node;
+}
+void pall(stack_t **stack, unsigned int line_number)
+{
+    stack_t *current = *stack;
+    (void) line_number;  // Line number is not used but we keep the signature consistent.
+
+    while (current)
+    {
+        printf("%d\n", current->n);
+        current = current->next;
+    }
+}
+void pop(stack_t **stack, unsigned int line_number)
+{
+    stack_t *temp;
+
+    if (!*stack)
+    {
+        fprintf(stderr, "L%d: can't pop an empty stack\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    temp = *stack;
+    *stack = (*stack)->next;
+
+    if (*stack)
+        (*stack)->prev = NULL;
+
+    free(temp);
+}
+
+/**
+ * pint - prints the value at the top of the stack, followed by a new line.
+ * @stack: double pointer to the head of the stack.
+ * @line_number: line number of the opcode in the file.
+ */
+void pint(stack_t **stack, unsigned int line_number)
+{
+    if (*stack == NULL) // Check if stack is empty
+    {
+        fprintf(stderr, "L%u: can't pint, stack empty\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    printf("%d\n", (*stack)->n);  // Print the value at the top of the stack
+}
+/**
+ * swap - swaps the top two elements of the stack.
+ * @stack: double pointer to the head of the stack.
+ * @line_number: line number of the opcode in the file.
+ */
+void swap(stack_t **stack, unsigned int line_number)
+{
+    int temp_val;
+
+    if (*stack == NULL || (*stack)->next == NULL) // Check if stack has less than two elements
+    {
+        fprintf(stderr, "L%u: can't swap, stack too short\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    // Swap the values of the top two nodes
+    temp_val = (*stack)->n;
+    (*stack)->n = (*stack)->next->n;
+    (*stack)->next->n = temp_val;
+}
+/**
+ * add - adds the top two elements of the stack.
+ * @stack: double pointer to the head of the stack.
+ * @line_number: line number of the opcode in the file.
+ */
+void add(stack_t **stack, unsigned int line_number)
+{
+    stack_t *temp_node;
+
+    if (*stack == NULL || (*stack)->next == NULL) // Check if stack has less than two elements
+    {
+        fprintf(stderr, "L%u: can't add, stack too short\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    // Add the values of the top two nodes
+    (*stack)->next->n += (*stack)->n;
+
+    // Remove the top node (free it) and re-assign the top
+    temp_node = *stack;
+    *stack = (*stack)->next;
+    (*stack)->prev = NULL;
+    free(temp_node);
+}
+
+/**
+ * nop - doesn't do anything.
+ * @stack: double pointer to the head of the stack.
+ * @line_number: line number of the opcode in the file.
+ */
+void nop(stack_t **stack, unsigned int line_number)
+{
+    (void) stack;       // Unused variable
+    (void) line_number; // Unused variable
+}
