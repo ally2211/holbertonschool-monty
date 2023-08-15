@@ -20,6 +20,20 @@ bool is_empty_or_spaces(const char* str) {
     }
     return true;
 }
+int is_integer(char *str)
+{
+    if (!str || *str == '\0')
+        return 0;
+    if (*str == '-' || *str == '+')
+        str++;
+    while (*str)
+    {
+        if (*str < '0' || *str > '9')
+            return 0;
+        str++;
+    }
+    return 1;
+}
 
 void read_bytecode_file(FILE *file)
 {
@@ -52,11 +66,12 @@ void read_bytecode_file(FILE *file)
 			}*/	
 			if (opcode)
 			{
+	//			printf("atoi is %d\n", atoi(value));
 				for (int i = 0; ops[i].opcode; i++)
 				{
 					if (strcmp(opcode, ops[i].opcode) == 0)
 					{
-						if (strcmp(opcode, "push") == 0 && (value == NULL || !atoi(value)))
+						if (strcmp(opcode, "push") == 0 && (value == NULL || !is_integer(value)))
 						{
 							fprintf(stderr, "L%d: usage: push integer\n", line_number);
 							free_stack(&stack);
