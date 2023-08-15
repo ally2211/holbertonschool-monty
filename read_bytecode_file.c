@@ -85,7 +85,7 @@ void read_bytecode_file(FILE *file)
 	free_stack(&stack);
 	if (line != NULL)
         {
-            free(line);
-            line = NULL;
+        //    free(line);
+           line = NULL;
         }
 }
