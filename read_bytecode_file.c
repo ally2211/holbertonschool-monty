@@ -73,8 +73,8 @@ void read_bytecode_file(FILE *file)
 				if (!opcode_found)
 				{
 					fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
-					free(line);
-					fclose(file);
+		//			free(line);
+		//			fclose(file);
 					exit(EXIT_FAILURE);
 				}
 				line_number++;
