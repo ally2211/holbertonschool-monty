@@ -15,7 +15,7 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    read_bytecode_file(file);  // Here, you pass the FILE* to the function
+    read_bytecode_file(file);  
 
     fclose(file);
     return EXIT_SUCCESS;

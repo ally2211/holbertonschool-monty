@@ -12,59 +12,74 @@ instruction_t ops[] = {
 };
 char *value;
 
+
+bool is_empty_or_spaces(const char* str) {
+    while (*str) {
+        if (!isspace((unsigned char)*str))
+            return false; // found a non-space character
+        str++;
+    }
+    return true;
+}
+
+
 void read_bytecode_file(FILE *file)
 {
     char *line = NULL, *opcode;
-    size_t len = 0, read, negone = -1;
+    size_t len = 0, read, eof = -1;
     unsigned int line_number = 0;
     char delimiters[] = " $\t\n";
     stack_t *stack = NULL;
     bool opcode_found;
-	
-    while ((read = getline(&line, &len, file)) != negone)
-	{
-		opcode = strtok(line, delimiters);
-		value = strtok(NULL, delimiters);
-		opcode_found = false;
 
-	/*	
-		if (value != NULL)
+
+	while ((read = getline(&line, &len, file)) != eof)
+	{
+		if (is_empty_or_spaces(line))
 		{
-			printf("Opcode: %s, Value: %s\n", opcode, value);
+		//	printf("Error: Line contains only spaces or is empty.\n");
 		}
 		else
 		{
-			printf("Opcode: %s\n", opcode);
-		}
-	*/
-		if (opcode)
-		{
-			for (int i = 0; ops[i].opcode; i++)
+			opcode = strtok(line, delimiters);
+			value = strtok(NULL, delimiters);
+			opcode_found = false;
+	
+		/*	if (value != NULL)
 			{
-				if (strcmp(opcode, ops[i].opcode) == 0)
-				{
-					if (strcmp(opcode, "push") == 0 && (value == NULL || !is_integer(value)))
-					{
-						fprintf(stderr, "L%d: usage: push integer. value is %s\n", line_number, value);
-						free(line);
-						fclose(file);
-						exit(EXIT_FAILURE);
-					} 
-					ops[i].f(&stack, line_number);
-					opcode_found = true;
-					break;
-				}
+				printf("Opcode: %s, Value: %s\n", opcode, value);
 			}
-			if (!opcode_found)
+			else
 			{
-				fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
-				free(line);
-				fclose(file);
+				printf("Opcode: %s\n", opcode);
 				exit(EXIT_FAILURE);
+			}*/	
+			if (opcode)
+			{
+				for (int i = 0; ops[i].opcode; i++)
+				{
+					if (strcmp(opcode, ops[i].opcode) == 0)
+					{
+						if (strcmp(opcode, "push") == 0 && (value == NULL || !is_integer(value)))
+						{
+							fprintf(stderr, "L%d: usage: push integer.\n", line_number);
+							exit(EXIT_FAILURE);
+						} 
+						ops[i].f(&stack, line_number);
+						opcode_found = true;
+						break;
+					}
+				}
+				if (!opcode_found)
+				{
+					fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
+					free(line);
+					fclose(file);
+					exit(EXIT_FAILURE);
+				}
+				line_number++;
+				line++;
 			}
-
-			line_number++;
-			line++;
 		}
 	}
 }
