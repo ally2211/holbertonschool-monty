@@ -27,7 +27,7 @@ void read_bytecode_file(FILE *file)
 {
     char *line = NULL, *opcode;
     size_t len = 0, read, eof = -1;
-    unsigned int line_number = 0;
+    unsigned int line_number = 1;
     char delimiters[] = " $\t\n";
     stack_t *stack = NULL;
     bool opcode_found;
@@ -56,7 +56,7 @@ void read_bytecode_file(FILE *file)
 			}*/	
 			if (opcode)
 			{
-				for (int i = 0; ops[i].opcode; i++)
+				for (int i = 1; ops[i].opcode; i++)
 				{
 					if (strcmp(opcode, ops[i].opcode) == 0)
 					{
