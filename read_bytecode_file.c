@@ -56,7 +56,7 @@ void read_bytecode_file(FILE *file)
 			}*/	
 			if (opcode)
 			{
-				for (int i = 1; ops[i].opcode; i++)
+				for (int i = 0; ops[i].opcode; i++)
 				{
 					if (strcmp(opcode, ops[i].opcode) == 0)
 					{
