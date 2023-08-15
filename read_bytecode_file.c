@@ -63,7 +63,7 @@ void read_bytecode_file(FILE *file)
 					{
 						if (strcmp(opcode, "push") == 0 && (value == NULL || !is_integer(value)))
 						{
-							fprintf(stderr, "L%d: usage: push integer.\n", line_number);
+							fprintf(stderr, "L%d: usage: push integer\n", line_number);
 							exit(EXIT_FAILURE);
 						} 
 						ops[i].f(&stack, line_number);
