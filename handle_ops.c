@@ -1,5 +1,16 @@
 #include "monty.h"
 
+void free_stack(stack_t **stack)
+{
+    stack_t *current_node;
+
+    while (*stack)
+    {
+        current_node = *stack;
+        *stack = (*stack)->next;
+        free(current_node);
+    }
+}
 
 /**
  * push - push a value at the top of the stack.
@@ -25,7 +36,7 @@ void push(stack_t **stack, unsigned int line_number)
         if (*stack)
                 (*stack)->prev = new_node;
         *stack = new_node;
-	free(new_node);
+//	free(new_node);
 }
 
 /**
@@ -40,6 +51,7 @@ void pall(stack_t **stack, unsigned int line_number)
 
 	while (current)
 	{
+//		printf("hello");
 		printf("%d\n", current->n);
 		current = current->next;
 	}
