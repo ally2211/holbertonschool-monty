@@ -18,7 +18,6 @@ int main(int argc, char **argv)
     }
 
     read_bytecode_file(file);  
-
     fclose(file);
     return (EXIT_SUCCESS);
 }

@@ -9,7 +9,7 @@ void free_stack(stack_t **stack)
         current_node = *stack;
         *stack = (*stack)->next;
         free(current_node);
-    }
+    }    
 }
 
 /**
@@ -36,7 +36,6 @@ void push(stack_t **stack, unsigned int line_number)
         if (*stack)
                 (*stack)->prev = new_node;
         *stack = new_node;
-//	free(new_node);
 }
 
 /**
@@ -55,7 +54,7 @@ void pall(stack_t **stack, unsigned int line_number)
 		printf("%d\n", current->n);
 		current = current->next;
 	}
-	free(current);
+	free_stack(&current);
 }
 
 
