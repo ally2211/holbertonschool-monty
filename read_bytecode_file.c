@@ -37,6 +37,7 @@ void read_bytecode_file(FILE *file)
 	{
 		if (is_empty_or_spaces(line))
 		{
+			line_number++;
 		//	printf("Error: Line contains only spaces or is empty.\n");
 		}
 		else
