@@ -22,7 +22,6 @@ bool is_empty_or_spaces(const char* str) {
     return true;
 }
 
-
 void read_bytecode_file(FILE *file)
 {
     char *line = NULL, *opcode;
@@ -37,6 +36,7 @@ void read_bytecode_file(FILE *file)
 	{
 		if (is_empty_or_spaces(line))
 		{
+			free(line);
 			line_number++;
 		//	printf("Error: Line contains only spaces or is empty.\n");
 		}
@@ -64,17 +64,20 @@ void read_bytecode_file(FILE *file)
 						if (strcmp(opcode, "push") == 0 && (value == NULL || !is_integer(value)))
 						{
 							fprintf(stderr, "L%d: usage: push integer\n", line_number);
+							free(line);
 							exit(EXIT_FAILURE);
-						} 
+						}
+
 						ops[i].f(&stack, line_number);
 						opcode_found = true;
+						free(line);
 						break;
 					}
 				}
 				if (!opcode_found)
 				{
 					fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
-		//			free(line);
+					free(line);
 		//			fclose(file);
 					exit(EXIT_FAILURE);
 				}
@@ -83,6 +86,8 @@ void read_bytecode_file(FILE *file)
 			}
 		}
 	}
+	free(line);
+	fclose(file);
 }
 
 int is_integer(char *str)
