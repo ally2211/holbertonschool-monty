@@ -74,6 +74,13 @@ void read_bytecode_file(FILE *file)
 				{
 					if (strcmp(opcode, ops[i].opcode) == 0)
 					{
+                                                //printf("value is %d \n", is_integer(value));
+						if(!is_integer(value))
+						{
+                                                   //printf("not  - opcode %s is int % d\n",opcode, is_integer(value));
+						   value = NULL;
+						}
+
 						if (strcmp(opcode, "push") == 0 && (value == NULL || !is_integer(value)))
 						{
 							fprintf(stderr, "L%d: usage: push integer\n", line_number);
