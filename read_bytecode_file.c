@@ -81,7 +81,7 @@ void read_bytecode_file(FILE *file)
 							if (line != NULL)
 							{	
 								free(opcode);
-								free(value);
+							//	free(value);
 								//free(line);
 								line = NULL;
 							}
