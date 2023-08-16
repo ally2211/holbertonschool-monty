@@ -53,7 +53,7 @@ void read_bytecode_file(FILE *file)
 		else
 		{
 			opcode = strtok(line, " $\t\n");
-		        if (line != NULL)
+		        if (opcode != NULL)
 			{
 				value = strtok(NULL, " $\t\n");
 			}
@@ -80,6 +80,8 @@ void read_bytecode_file(FILE *file)
 							free_stack(&stack);
 							if (line != NULL)
 							{	
+								free(opcode);
+								free(value);
 								free(line);
 								line = NULL;
 							}
@@ -115,7 +117,9 @@ void read_bytecode_file(FILE *file)
 //	  printf("after free_stack im out of while loop my line is %d\n and line is : %s\n", line_number, line);
 	if (line != NULL)
         {
-           printf("free 1");
+		free(value);
+		free(opcode);
+          // printf("free 1");
          	free(line);
            line = NULL;
         }
