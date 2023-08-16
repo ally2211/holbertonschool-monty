@@ -18,6 +18,8 @@ int main(int argc, char **argv)
     }
 
     read_bytecode_file(file);  
+//    printf("im in the main closing");
+    free(file);
     fclose(file);
     return (EXIT_SUCCESS);
 }

@@ -53,8 +53,11 @@ void read_bytecode_file(FILE *file)
 		else
 		{
 			opcode = strtok(line, " $\t\n");
-		        value = strtok(NULL, " $\t\n");
-			opcode_found = false;
+		        if (line != NULL)
+			{
+				value = strtok(NULL, " $\t\n");
+			}
+				opcode_found = false;
 		/*	if (value != NULL)
 			{
 				printf("Opcode: %s, Value: %s\n", opcode, value);
@@ -75,6 +78,11 @@ void read_bytecode_file(FILE *file)
 						{
 							fprintf(stderr, "L%d: usage: push integer\n", line_number);
 							free_stack(&stack);
+							if (line != NULL)
+							{	
+								free(line);
+								line = NULL;
+							}
 							exit(EXIT_FAILURE);
 						}
 
@@ -86,22 +94,29 @@ void read_bytecode_file(FILE *file)
 				if (!opcode_found)
 				{
 					fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
-					free(line);
+					if (line != NULL)
+					{
+						printf("free 2");
+						free(line);
+						line = NULL;
+					}
 					free_stack(&stack);
 					exit(EXIT_FAILURE);
 				}
 //				printf("when am i here line number is line %d\n",line_number);
 				line_number++;
-				line++;
+				//line++;
 			}//if opcode
-//			printf("checking when i get out of if opcode my line is %d\n",line_number);
+			printf("checking when i get out of if opcode my line is %d\n",line_number);
 		}//else
 	}//while
-//	printf("im out of while loop my line is %d\n", line_number);
+//	printf("im out of while loop my line is %d\n and line is : %s\n", line_number, line);
 	free_stack(&stack);
+//	  printf("after free_stack im out of while loop my line is %d\n and line is : %s\n", line_number, line);
 	if (line != NULL)
         {
-        //    free(line);
+           printf("free 1");
+         	free(line);
            line = NULL;
         }
 }
