@@ -82,7 +82,7 @@ void read_bytecode_file(FILE *file)
 							{	
 								free(opcode);
 								free(value);
-								free(line);
+								//free(line);
 								line = NULL;
 							}
 							exit(EXIT_FAILURE);
@@ -99,7 +99,9 @@ void read_bytecode_file(FILE *file)
 					if (line != NULL)
 					{
 						printf("free 2");
-						free(line);
+						free(opcode);
+						if (!value)
+							free(value);
 						line = NULL;
 					}
 					free_stack(&stack);
@@ -109,7 +111,7 @@ void read_bytecode_file(FILE *file)
 				line_number++;
 				//line++;
 			}//if opcode
-			printf("checking when i get out of if opcode my line is %d\n",line_number);
+	//		printf("checking when i get out of if opcode my line is %d\n",line_number);
 		}//else
 	}//while
 //	printf("im out of while loop my line is %d\n and line is : %s\n", line_number, line);
@@ -120,7 +122,7 @@ void read_bytecode_file(FILE *file)
 		free(value);
 		free(opcode);
           // printf("free 1");
-         	free(line);
+//         	free(line);
            line = NULL;
         }
 }
