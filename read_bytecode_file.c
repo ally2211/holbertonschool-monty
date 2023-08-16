@@ -98,7 +98,7 @@ void read_bytecode_file(FILE *file)
 					fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
 					if (line != NULL)
 					{
-						printf("free 2");
+	//					printf("free 2");
 						free(opcode);
 						if (!value)
 							free(value);
