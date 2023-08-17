@@ -1,6 +1,6 @@
 #include "monty.h"
 
-/*
+/**
  * main - open a file to read
  * @argc: program name
  * @argv: filename is first argument
