@@ -1,86 +1,86 @@
 #include "monty.h"
 
 instruction_t ops[] = {
-        {"push", push},
-        {"pall", pall},
+	{"push", push},
+	{"pall", pall},
 	{"pint", pint},
-        {"pop", pop},
-        {"swap", swap},
-        {"add", add},
-        {"nop", nop},
-        {NULL, NULL}
+	{"pop", pop},
+	{"swap", swap},
+	{"add", add},
+	{"nop", nop},
+	{NULL, NULL}
 };
 char *value = NULL;
-
-bool is_empty_or_spaces(const char* str) {
-    while (*str) {
-        if (!isspace((unsigned char)*str))
-            return false; // found a non-space character
-        str++;
-    }
-    return true;
+/**
+ * is_empty_or_spaces - check if spaces or empty line
+ * str:  string to check
+ *
+ * Return: bool true no spaces
+ */ 
+bool is_empty_or_spaces(const char *str) 
+{
+	while (*str)
+	{
+		if (!isspace((unsigned char)*str))
+			return (false);
+		str++;
+	}
+	return true;
 }
+/**
+ * is_integer - check if is integer including a zero
+ * str:  string to check
+ *
+ * Return: 1 for yes is an integer
+ **/
 int is_integer(char *str)
 {
-    if (!str || *str == '\0')
-        return 0;
-    if (*str == '-' || *str == '+')
-        str++;
-    while (*str)
-    {
-        if (*str < '0' || *str > '9')
-            return 0;
-        str++;
-    }
-    return 1;
+	if (!str || *str == '\0')
+		return (0);
+	if (*str == '-' || *str == '+')
+		str++;
+	while (*str)
+	{
+		if (*str < '0' || *str > '9')
+			return (0);
+		str++;
+	}
+	return (1);
 }
-
+/**
+ * read_bytecode_file - getline and tokenize
+ * @file:  name of file
+ *
+ * Return: void
+ **/
 void read_bytecode_file(FILE *file)
 {
-    char *opcode, *line = NULL;
-    size_t len = 0, read, eof = -1;
-    unsigned int line_number = 1;
-    stack_t *stack = NULL;
-    bool opcode_found;
+	char *opcode, *line = NULL;
+	size_t len = 0, read, eof = -1;
+	unsigned int line_number = 1;
+	stack_t *stack = NULL;
+	bool opcode_found;
 
 	while ((read = getline(&line, &len, file)) != eof)
 	{
 		if (is_empty_or_spaces(line))
-		{
 			line_number++;
-		//	printf("Error: Line contains only spaces or is empty.\n");
-		}
 		else
 		{
 			opcode = strtok(line, " $\t\n");
 		        if (opcode != NULL)
-			{
 				value = strtok(NULL, " $\t\n");
-			}
-				opcode_found = false;
-		/*	if (value != NULL)
-			{
-				printf("Opcode: %s, Value: %s\n", opcode, value);
-			}
-			else
-			{
-				printf("Opcode: %s\n", opcode);
-				exit(EXIT_FAILURE);
-			}*/	
+			opcode_found = false;
 			if (opcode)
 			{
-	//			printf("atoi is %d\n", atoi(value));
 				for (int i = 0; ops[i].opcode; i++)
 				{
 					if (strcmp(opcode, ops[i].opcode) == 0)
 					{
-                                                //printf("value is %d \n", is_integer(value));
 						if(!is_integer(value))
 						{
-                                                   //printf("not  - opcode %s is int % d\n",opcode, is_integer(value));
-						   value = NULL;
+							value = NULL;
 						}
-
 						if (strcmp(opcode, "push") == 0 && (value == NULL || !is_integer(value)))
 						{
 							fprintf(stderr, "L%d: usage: push integer\n", line_number);
@@ -88,13 +88,10 @@ void read_bytecode_file(FILE *file)
 							if (line != NULL)
 							{	
 								free(opcode);
-							//	free(value);
-								//free(line);
 								line = NULL;
 							}
 							exit(EXIT_FAILURE);
 						}
-
 						ops[i].f(&stack, line_number);
 						opcode_found = true;
 						break;
@@ -105,7 +102,6 @@ void read_bytecode_file(FILE *file)
 					fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
 					if (line != NULL)
 					{
-	//					printf("free 2");
 						free(opcode);
 						if (!value)
 							free(value);
@@ -114,22 +110,15 @@ void read_bytecode_file(FILE *file)
 					free_stack(&stack);
 					exit(EXIT_FAILURE);
 				}
-//				printf("when am i here line number is line %d\n",line_number);
 				line_number++;
-				//line++;
-			}//if opcode
-	//		printf("checking when i get out of if opcode my line is %d\n",line_number);
-		}//else
-	}//while
-//	printf("im out of while loop my line is %d\n and line is : %s\n", line_number, line);
+			}
+		}
+	}
 	free_stack(&stack);
-//	  printf("after free_stack im out of while loop my line is %d\n and line is : %s\n", line_number, line);
 	if (line != NULL)
-        {
+	{
 		free(value);
 		free(opcode);
-          // printf("free 1");
-//         	free(line);
-           line = NULL;
-        }
+		line = NULL;
+	}
 }
