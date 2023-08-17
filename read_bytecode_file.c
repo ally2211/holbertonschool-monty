@@ -13,11 +13,11 @@ instruction_t ops[] = {
 char *value = NULL;
 /**
  * is_empty_or_spaces - check if spaces or empty line
- * str:  string to check
+ * @str:  string to check
  *
  * Return: bool true no spaces
- */ 
-bool is_empty_or_spaces(const char *str) 
+ */
+bool is_empty_or_spaces(const char *str)
 {
 	while (*str)
 	{
@@ -25,11 +25,11 @@ bool is_empty_or_spaces(const char *str)
 			return (false);
 		str++;
 	}
-	return true;
+	return (true);
 }
 /**
  * is_integer - check if is integer including a zero
- * str:  string to check
+ * @str:  string to check
  *
  * Return: 1 for yes is an integer
  **/
@@ -68,7 +68,7 @@ void read_bytecode_file(FILE *file)
 		else
 		{
 			opcode = strtok(line, " $\t\n");
-		        if (opcode != NULL)
+			if (opcode != NULL)
 				value = strtok(NULL, " $\t\n");
 			opcode_found = false;
 			if (opcode)
@@ -77,24 +77,22 @@ void read_bytecode_file(FILE *file)
 				{
 					if (strcmp(opcode, ops[i].opcode) == 0)
 					{
-						if(!is_integer(value))
+					if (!is_integer(value))
+						value = NULL;
+					if (strcmp(opcode, "push") == 0 && (value == NULL || !is_integer(value)))
+					{
+						fprintf(stderr, "L%d: usage: push integer\n", line_number);
+						free_stack(&stack);
+						if (line != NULL)
 						{
-							value = NULL;
+						free(opcode);
+						line = NULL;
 						}
-						if (strcmp(opcode, "push") == 0 && (value == NULL || !is_integer(value)))
-						{
-							fprintf(stderr, "L%d: usage: push integer\n", line_number);
-							free_stack(&stack);
-							if (line != NULL)
-							{	
-								free(opcode);
-								line = NULL;
-							}
-							exit(EXIT_FAILURE);
-						}
-						ops[i].f(&stack, line_number);
-						opcode_found = true;
-						break;
+						exit(EXIT_FAILURE);
+					}
+					ops[i].f(&stack, line_number);
+					opcode_found = true;
+					break;
 					}
 				}
 				if (!opcode_found)
@@ -102,10 +100,10 @@ void read_bytecode_file(FILE *file)
 					fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
 					if (line != NULL)
 					{
-						free(opcode);
-						if (!value)
-							free(value);
-						line = NULL;
+					free(opcode);
+					if (!value)
+						free(value);
+					line = NULL;
 					}
 					free_stack(&stack);
 					exit(EXIT_FAILURE);
