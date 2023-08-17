@@ -83,12 +83,12 @@ void read_bytecode_file(FILE *file)
 					{
 						fprintf(stderr, "L%d: usage: push integer\n", line_number);
 						free_stack(&stack);
-						if (line != NULL)
-						{
+					if (line != NULL)
+					{
 						free(opcode);
 						line = NULL;
-						}
-						exit(EXIT_FAILURE);
+					}
+					exit(EXIT_FAILURE);
 					}
 					ops[i].f(&stack, line_number);
 					opcode_found = true;
